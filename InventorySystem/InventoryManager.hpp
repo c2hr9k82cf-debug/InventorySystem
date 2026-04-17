@@ -10,6 +10,8 @@
 
 
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "Product.hpp"
 
 class InventoryManager {
@@ -27,6 +29,12 @@ public:
     // 3. 根据 ID 查找商品（这个有点难，你可以先想想怎么写）
     // 提示：如果找到了，返回它的索引；没找到返回 -1
     Product* findProductById(int id) ;
+    
+    //
+    void saveToFile(const std::string& filename) const;
+    
+    //
+    void loadFromFile(const std::string& filename);
 };
 
 #endif /* InventoryManager_hpp */

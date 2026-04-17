@@ -33,5 +33,55 @@ Product* InventoryManager::findProductById(int id){
             return &prod;   //Return the memory address of the found object
         }
     }
-    return nullptr;// Standard C++ way to indicate "not found"1
+    return nullptr;// Standard C++ way to indicate "not found"
+}
+
+void InventoryManager::saveToFile(const std::string& filename) const{
+    std::ofstream outFile(filename);    //Create an output file stream
+    if(!outFile){
+        throw std::runtime_error("Unable to open file:" + filename);
+    }
+    
+    for(const auto& prod :m_products){
+        //Write product attributes sepatated by commas (CSV format)
+        outFile <<prod.id()<<","
+                <<prod.name()<<","
+                <<prod.price()<<","
+                <<prod.stock()<<"\n";
+    }
+    
+    outFile.close();    // Close the file to flush data
+    std::cout<<"Successfully saved data to"<<filename<<std::endl;
+}
+
+void InventoryManager::loadFromFile(const std::string& filename){
+    std::ifstream inFile(filename);
+    if(!inFile) return; //If file doesn't exist,exit silently
+    
+    m_products.clear(); //Ensure we don't duplicate data on reload
+    std::string line;
+    
+    while (std::getline(inFile, line)) {
+            if (line.empty()) continue; // Skip any accidental blank lines
+
+            std::stringstream ss(line);
+            std::string idStr, name, priceStr, stockStr;
+
+            // Parse the line using ',' as the delimiter
+            std::getline(ss, idStr, ',');
+            std::getline(ss, name, ',');
+            std::getline(ss, priceStr, ',');
+            std::getline(ss, stockStr, ',');
+
+            // Attempt to convert strings to numeric types
+            try {
+                int id = std::stoi(idStr);
+                double price = std::stod(priceStr);
+                int stock = std::stoi(stockStr);
+                m_products.push_back(Product(id, name, price, stock));
+            } catch (...) {
+                continue; // Log and skip malformed or corrupted data rows
+            }
+        }
+        std::cout << "Loaded " << m_products.size() << " products." << std::endl;
 }
