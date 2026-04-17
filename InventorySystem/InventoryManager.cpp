@@ -33,5 +33,5 @@ Product* InventoryManager::findProductById(int id){
             return &prod;   //Return the memory address of the found object
         }
     }
-    return nullptr;// Standard C++ way to indicate "not found"
+    return nullptr;// Standard C++ way to indicate "not found"1
 }
