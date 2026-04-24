@@ -85,3 +85,36 @@ void InventoryManager::loadFromFile(const std::string& filename){
         }
         std::cout << "Loaded " << m_products.size() << " products." << std::endl;
 }
+
+bool InventoryManager::removeProductById(int id){
+    //
+    auto it=std::find_if(m_products.begin(), m_products.end(), [id](const Product& p){
+        return p.id()==id;
+    });
+    
+    //If not found, return false to main
+    if(it == m_products.end()){
+        return false;
+    }
+    
+    //If found, delete
+    m_products.erase(it);
+    return true;
+}
+
+void InventoryManager::updateInterface(Product *p){
+    std::cout << "Updating: "<< p->name() <<std::endl;
+    std::cout << "1.Update Price\n2.Update Stock\nSelect:";
+    int choice; std::cin >> choice;
+    if(choice==1){
+        double newPrice;
+                std::cout << "New Price: "; std::cin >> newPrice;
+                p->setPrice(newPrice);
+    }else if (choice==2){
+        int newStock;
+                std::cout << "New Stock: "; std::cin >> newStock;
+                p->setStock(newStock);
+    }else{
+        return;
+    }
+}

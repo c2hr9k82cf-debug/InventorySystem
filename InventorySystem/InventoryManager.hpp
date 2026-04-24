@@ -35,6 +35,12 @@ public:
     
     //
     void loadFromFile(const std::string& filename);
+    
+    //find and then remove
+    bool removeProductById(int id);
+    
+    //Change
+    void updateInterface(Product* p);
 };
 
 #endif /* InventoryManager_hpp */
